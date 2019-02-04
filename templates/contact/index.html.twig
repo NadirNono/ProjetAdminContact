@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact index{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('assets/back/css/amcharts.css') }}" type="text/css" />
+{% endblock %}
+
+{% block body %}
+    <h1>Contact index</h1>
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>IpContact</th>
+                    <th>DateContact</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th>Message</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for contact in contacts %}
+                <tr>
+                    <td>{{ contact.id }}</td>
+                    <td>{{ contact.ipContact }}</td>
+                    <td>{{ contact.dateContact ? contact.dateContact|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ contact.username }}</td>
+                    <td>{{ contact.email }}</td>
+                    <td>{{ contact.subject }}</td>
+                    <td>{{ contact.status }}</td>
+                    <td>{{ contact.message }}</td>
+                    <td>
+                        <a class="btn btn-success btn-sm" href="{{ path('contact_show', {'id': contact.id}) }}">show</a>
+                        <a class="btn btn-primary btn-sm" href="{{ path('contact_edit', {'id': contact.id}) }}">edit</a>
+                        {# <a class="btn btn-danger btn-sm" href="{{ path('contact_delete', {'id': contact.id}) }}">delete</a> #}
+                        {{ include('contact/_delete_form.html.twig') }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="9">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a class="btn btn-primary btn-sm" href="{{ path('contact_new') }}">Create new</a>
+    <div id="chartdiv"></div>
+{% endblock %}
+{% block javascripts %}
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+
+<script src="{{ asset('assets/back/js/amcharts.js') }}"></script>
+{% endblock %}
