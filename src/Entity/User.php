@@ -2,17 +2,13 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity(
- *     fields={"email"},
- *     message="L'email existe déjà"
- * )
  */
 class User implements UserInterface
 {
@@ -25,44 +21,59 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Email()
+     */
+    private $userName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
      */
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text", nullable=true)
      */
-    private $username;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(min="8", minMessage="Votre mot de passe doit faire minimum 8 caractères")
-     */
-    private $password;
-
-    /**
-     * @Assert\EqualTo(propertyPath="password", message="Vous n'avez pas tapé le même mot de passe !")
-     */
-    public $confirm_password;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $roleuser;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $employee;
+    private $picture;
 
     /**
      * @ORM\Column(type="datetime")
      */
     private $dateInscription;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $password;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $job;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Role", mappedBy="users")
+     */
+    private $userRoles;
+
+    public function __construct()
+    {
+        $this->userRoles = new ArrayCollection();
+    }
+
     public function getId() : ? int
     {
         return $this->id;
+    }
+
+    public function getUserName() : ? string
+    {
+        return $this->userName;
+    }
+
+    public function setUserName(string $userName) : self
+    {
+        $this->userName = $userName;
+
+        return $this;
     }
 
     public function getEmail() : ? string
@@ -77,50 +88,14 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getUsername() : ? string
+    public function getPicture() : ? string
     {
-        return $this->username;
+        return $this->picture;
     }
 
-    public function setUsername(string $username) : self
+    public function setPicture(? string $picture) : self
     {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    public function getPassword() : ? string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password) : self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    public function getRoleuser() : ? string
-    {
-        return $this->roleuser;
-    }
-
-    public function setRoleuser(string $roleuser) : self
-    {
-        $this->roleuser = $roleuser;
-
-        return $this;
-    }
-
-    public function getEmployee() : ? string
-    {
-        return $this->employee;
-    }
-
-    public function setEmployee(string $employee) : self
-    {
-        $this->employee = $employee;
+        $this->picture = $picture;
 
         return $this;
     }
@@ -137,6 +112,58 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getPassword() : ? string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password) : self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function getJob() : ? string
+    {
+        return $this->job;
+    }
+
+    public function setJob(? string $job) : self
+    {
+        $this->job = $job;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Role[]
+     */
+    public function getUserRoles() : Collection
+    {
+        return $this->userRoles;
+    }
+
+    public function addUserRole(Role $userRole) : self
+    {
+        if (!$this->userRoles->contains($userRole)) {
+            $this->userRoles[] = $userRole;
+            $userRole->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserRole(Role $userRole) : self
+    {
+        if ($this->userRoles->contains($userRole)) {
+            $this->userRoles->removeElement($userRole);
+            $userRole->removeUser($this);
+        }
+
+        return $this;
+    }
+
     public function getRoles()
     {
         return ['ROLE_USER'];
@@ -149,5 +176,4 @@ class User implements UserInterface
     public function eraseCredentials()
     {
     }
-
 }
