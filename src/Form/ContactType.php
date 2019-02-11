@@ -13,13 +13,12 @@ class ContactType extends AbstractType
     {
         $builder
             ->add('ipContact')
-            ->add('dateContact')
+            //->add('dateContact')
             ->add('username')
             ->add('email')
             ->add('subject')
             ->add('status')
-            ->add('message')
-        ;
+            ->add('message');
     }
 
     public function configureOptions(OptionsResolver $resolver)

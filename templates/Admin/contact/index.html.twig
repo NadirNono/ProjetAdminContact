@@ -36,10 +36,10 @@
                         <td class="text-center"><span class="badge badge-success rounded">{{ contact.status }}</span></td>
                         <td>{{ contact.message }}</td>
                         <td>
-                            <a class="btn btn-success btn-sm" href="{{ path('contact_show', {'id': contact.id}) }}"> <i class="fas fa-eye"></i> show</a>
+                            <a class="btn btn-success btn-sm" href="{{ path('admin_contact_show', {'id': contact.id}) }}"> <i class="fas fa-eye"></i> show</a>
                             
-                            <a class="btn btn-primary btn-sm" href="{{ path('contact_edit', {'id': contact.id}) }}"> <i class="fas fa-edit"></i> edit</a>
-                            <a class="btn btn-danger btn-sm" href="{{ path('contact_delete', {'id': contact.id}) }}"> <i class="fas fa-trash"></i> delete</a>
+                            <a class="btn btn-primary btn-sm" href="{{ path('admin_contact_edit', {'id': contact.id}) }}"> <i class="fas fa-edit"></i> edit</a>
+                            <a class="btn btn-danger btn-sm" href="{{ path('admin_contact_delete', {'id': contact.id}) }}"> <i class="fas fa-trash"></i> delete</a>
                             {# {{ include('contact/_delete_form.html.twig') }} #}
                         </td>
                     </tr>
@@ -51,7 +51,7 @@
                 </tbody>
             </table>
         </div>
-        <a class="btn btn-primary btn-sm" href="{{ path('contact_new') }}">Create new</a>
+        <a class="btn btn-primary btn-sm" href="{{ path('admin_contact_new') }}">Create new</a>
         <div id="chartdiv"></div>
     </div>
 {% endblock %}
