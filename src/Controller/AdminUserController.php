@@ -52,6 +52,15 @@ class AdminUserController extends AbstractController
             // $entityManager prépare la requête avec persist()
             $entityManager->persist($user);
 
+            // Pour chaque new user on récupère son role
+            foreach( $user->getUserRoles() as $userRoles ) {
+
+                $userRoles->addUser($user);
+
+                // $entityManager prépare la requête avec persist()
+                $entityManager->persist($userRoles);
+            }
+
             // $entityManager éxecute la requête avec flush() !
             $entityManager->flush();
 
