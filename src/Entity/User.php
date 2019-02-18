@@ -166,7 +166,15 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        $listRoles = $this->userRoles->toArray();
+        foreach( $listRoles as $userRole) {
+            $userRoles[] = $userRole->getValue();
+        }
+        // Afin d'être sûr qu'un user a toujours au moins 1 rôle
+        if (empty($listRoles)) {
+            $userRoles[] = 'ROLE_USER';
+        }
+        return array_unique($userRoles);
     }
 
     public function getSalt()
